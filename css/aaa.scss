@@ -1,0 +1,62 @@
+*{margin: 0;padding:0;}
+html{font-size: 0.8rem;}
+html,body{width:100%;}
+body{
+  position:relative;margin:0 auto;transform-origin: left top;
+  -webkit-text-size-adjust: 100%;
+}
+img{display: block;}
+input,select,textarea{
+  border: none;
+  outline: none;
+   -webkit-appearance: none; 
+}
+button{background: none;border:none;}
+input{text-align: center;}
+
+
+h1 {
+  font-size: 1.5rem;
+  font-weight: 400;
+  text-align: center;
+  /*margin: 0.67em 0;*/
+}
+h2,h3 {
+  font-size: 1.125rem;
+  font-weight: normal;
+  margin:0;
+  padding:0;
+}
+@media screen and (min-width:400px) {
+  
+  html{font-size:0.875rem;}
+}
+@media screen and (min-width:540px) {
+  html{font-size:1.125rem;}
+}
+@media screen and (min-width:639px) {
+  html{font-size:1.25rem;}
+}
+@media screen and (min-width:670px) {
+  html{font-size:1.5rem;}
+}
+@media screen and (min-width:800px) {
+  html {font-size:1.75rem;}
+}
+@media screen and (min-width:1000px) {
+  html{font-size:2rem;}
+}
+@media screen and (min-width:1367px) {
+  html{font-size:2.125rem;}
+}
+li{list-style-type:none;}
+.clear-both{clear:both;}
+.abs-box{position: absolute;left:0;top:0;}
+.full-width{width:100%;}
+.full-all{width:100%;height:100%;}
+.tmp_scp{display: none;}
+.d-hide{display: none;}
+.d-show{display: visible;}
+.d-hidden{visibility: hidden;opacity:0;}
+.d-visible{visibility: visible;opacity:1;}
+/*-webkit-appearance: textfield;*/
