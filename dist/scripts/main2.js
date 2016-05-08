@@ -55,8 +55,9 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	/*********************************************************
-	Author: 戴戴戴(2540546236@qq.com)
-	Latest: 16-05-08
+	Author : 戴戴戴(2540546236@qq.com)
+	Latest : 16-05-08
+	cnblogs: www.cnblogs.com/daidaidai/
 	*********************************************************/
 
 	var MxEvent = _Miku2.default.MxEvent;
