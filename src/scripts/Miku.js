@@ -128,19 +128,19 @@ Vec.prototype = Object.create({
   },
   normal : function(){
     var len = this.length();
-    return len ? new _$.Vec(this.x/len , this.y/len): new _$.Vec(0,0);
+    return len ? new Vec(this.x/len , this.y/len): new Vec(0,0);
   },
   scale : function(scale){
-    return new _$.Vec(this.x*scale , this.y*scale);
+    return new Vec(this.x*scale , this.y*scale);
   },
   add : function(vec){
-    return new _$.Vec(this.x+vec.x , this.y+vec.y);
+    return new Vec(this.x+vec.x , this.y+vec.y);
   },
   sub : function(vec){
-    return new _$.Vec(this.x-vec.x , this.y-vec.y);
+    return new Vec(this.x-vec.x , this.y-vec.y);
   },
   vertical : function(){
-    return new _$.Vec(this.y , -this.x);
+    return new Vec(this.y , -this.x);
   },
   dot : function(vec){
     return this.x*vec.x + this.y*vec.y;
@@ -149,19 +149,47 @@ Vec.prototype = Object.create({
     return this.x*vec.y - this.y*vec.x;
   },
   clone : function(){
-    return new _$.Vec(this.x,this.y,this.z);
+    return new Vec(this.x,this.y,this.z);
   },
   rotate : function(radian){
     var cosine = Math.cos(radian),
       sine = Math.sin(radian),
       x = cosine * this.x - sine * this.y,
       y = cosine * this.y + sine * this.x;
-    return new _$.Vec(x,y);
+    return new _Vec(x,y);
   },
   radian : function(){
     return Math.atan2(this.y , this.x); 
   }
 });
+const matrix3 = function(){
+  var ar = Array.from(arguments);
+ 
+  var matrix = {
+    mpy : function(B){
+      var a = this.ar.concat();
+   
+      var args = Array.from(arguments);
+
+
+      for(var i = 0,len = args.length;i<len;++i){
+       var b = args[i].ar;
+       
+        var c =  [
+         [ a[0][0]*b[0][0]+a[0][1]*b[1][0]+a[0][2]*b[2][0] , a[0][0]*b[0][1]+a[0][1]*b[1][1]+a[0][2]*b[2][1] , a[0][0]*b[0][2]+a[0][1]*b[1][2]+a[0][2]*b[2][2] ]
+         ,[a[1][0]*b[0][0]+a[1][1]*b[1][0]+a[1][2]*b[2][0] , a[1][0]*b[0][1]+a[1][1]*b[1][1]+a[1][2]*b[2][1] , a[1][0]*b[0][0]+a[1][1]*b[1][2]+a[1][2]*b[2][2]  ]
+         ,[a[2][0]*b[0][0]+a[2][1]*b[1][0]+a[2][2]*b[2][0] , a[2][0]*b[0][1]+a[2][1]*b[1][1]+a[2][2]*b[2][1] , a[2][0]*b[0][2]+a[2][1]*b[1][2]+a[2][2]*b[2][2]  ]
+        ]
+
+        a = c.concat();
+       
+      };
+      return a;
+    }
+    ,ar : ar
+  };
+  return matrix;
+};
 
 export default {
   MxEvent : MxEvent

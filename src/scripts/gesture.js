@@ -7,7 +7,7 @@ export function gesture(s,prop){
   const _ = {
     scale : {
       execute(pos){
-        //console.log(pos);
+  
         const {point1,point2} = pos;
         const len = (new Vec(
           point1.x - point2.x

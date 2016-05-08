@@ -46,11 +46,11 @@
 
 	'use strict';
 
-	var _Miku = __webpack_require__(2);
+	var _Miku = __webpack_require__(1);
 
 	var _Miku2 = _interopRequireDefault(_Miku);
 
-	var _gesture = __webpack_require__(1);
+	var _gesture = __webpack_require__(2);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -288,125 +288,6 @@
 
 /***/ },
 /* 1 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.gesture = gesture;
-
-	var _Miku = __webpack_require__(2);
-
-	var _Miku2 = _interopRequireDefault(_Miku);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var MxEvent = _Miku2.default.MxEvent;
-	var Vec = _Miku2.default.Vec;
-	var extend = _Miku2.default.extend;
-	function gesture(s, prop) {
-	  var methods = s.split(/,/).map(function (s) {
-	    return s.trim();
-	  });
-	  var _ = {
-	    scale: {
-	      execute: function execute(pos) {
-	        //console.log(pos);
-	        var point1 = pos.point1;
-	        var point2 = pos.point2;
-
-	        var len = new Vec(point1.x - point2.x, point1.y - point2.y).length();
-
-	        if (!this.blen) this.blen = len;
-
-	        var s = len / this.blen * this.bs;
-	        this.sss = s;
-
-	        this.custom && this.custom(point1, point2, s);
-
-	        gesture.trigger('scale', { scale: s });
-	      },
-	      resolve: function resolve() {
-	        this.bs = this.sss;
-	        this.blen = 0;
-
-	        this.bs = max(prop.min_scale, min(this.bs, prop.max_scale));
-
-	        gesture.trigger('scale', { scale: this.bs });
-	      },
-	      bs: 1, sss: 1,
-	      blen: 0
-	    },
-	    drag: {
-	      execute: function execute(pos) {
-	        var point1 = pos.point1;
-
-	        if (!this.bv) this.bv = new Vec(point1.x, point1.y);
-	        var dx = point1.x - this.bv.x;
-	        var dy = point1.y - this.bv.y;
-	        this.bv.x = point1.x, this.bv.y = point1.y;
-	        gesture.trigger('drag', { dx: dx, dy: dy });
-	      },
-	      bv: 0,
-	      resolve: function resolve() {
-	        this.bv = 0;
-	      }
-	    },
-	    rotate: {
-	      execute: function execute(pos) {
-	        var point1 = pos.point1;
-	        var point2 = pos.point2;
-
-	        var v = new Vec(point1.x - point2.x, point1.y - point2.y).normal();
-
-	        if (!this.bvec) this.bvec = v;
-
-	        var rd = asin(v.cross(this.bvec) * -1);
-
-	        this.rotation = this.br + rd;
-
-	        this.custom && this.custom(point1, point2, this.rotation);
-
-	        gesture.trigger('rotate', {
-	          rotation: this.rotation
-	        });
-	      },
-	      resolve: function resolve() {
-	        this.bvec = 0;
-	        this.br = this.rotation;
-	      },
-	      bvec: 0,
-	      br: 0,
-	      rotation: 0
-
-	    }
-	  };
-	  var gesture = {
-	    execute: function execute(pos) {
-
-	      methods.forEach(function (s) {
-	        _[s].execute(pos);
-	      });
-	    },
-	    custom: function custom(s, fn) {
-	      _[s.trim()].custom = fn;
-	    },
-	    resolve: function resolve() {
-	      methods.forEach(function (s) {
-	        _[s].resolve();
-	      });
-	    }
-	  };
-
-	  extend(gesture, MxEvent, _);
-
-	  return gesture;
-	}
-
-/***/ },
-/* 2 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -534,19 +415,19 @@
 	  },
 	  normal: function normal() {
 	    var len = this.length();
-	    return len ? new _$.Vec(this.x / len, this.y / len) : new _$.Vec(0, 0);
+	    return len ? new Vec(this.x / len, this.y / len) : new Vec(0, 0);
 	  },
 	  scale: function scale(_scale) {
-	    return new _$.Vec(this.x * _scale, this.y * _scale);
+	    return new Vec(this.x * _scale, this.y * _scale);
 	  },
 	  add: function add(vec) {
-	    return new _$.Vec(this.x + vec.x, this.y + vec.y);
+	    return new Vec(this.x + vec.x, this.y + vec.y);
 	  },
 	  sub: function sub(vec) {
-	    return new _$.Vec(this.x - vec.x, this.y - vec.y);
+	    return new Vec(this.x - vec.x, this.y - vec.y);
 	  },
 	  vertical: function vertical() {
-	    return new _$.Vec(this.y, -this.x);
+	    return new Vec(this.y, -this.x);
 	  },
 	  dot: function dot(vec) {
 	    return this.x * vec.x + this.y * vec.y;
@@ -555,25 +436,165 @@
 	    return this.x * vec.y - this.y * vec.x;
 	  },
 	  clone: function clone() {
-	    return new _$.Vec(this.x, this.y, this.z);
+	    return new Vec(this.x, this.y, this.z);
 	  },
 	  rotate: function rotate(radian) {
 	    var cosine = Math.cos(radian),
 	        sine = Math.sin(radian),
 	        x = cosine * this.x - sine * this.y,
 	        y = cosine * this.y + sine * this.x;
-	    return new _$.Vec(x, y);
+	    return new _Vec(x, y);
 	  },
 	  radian: function radian() {
 	    return Math.atan2(this.y, this.x);
 	  }
 	});
+	var matrix3 = function matrix3() {
+	  var ar = Array.from(arguments);
+
+	  var matrix = {
+	    mpy: function mpy(B) {
+	      var a = this.ar.concat();
+
+	      var args = Array.from(arguments);
+
+	      for (var i = 0, len = args.length; i < len; ++i) {
+	        var b = args[i].ar;
+
+	        var c = [[a[0][0] * b[0][0] + a[0][1] * b[1][0] + a[0][2] * b[2][0], a[0][0] * b[0][1] + a[0][1] * b[1][1] + a[0][2] * b[2][1], a[0][0] * b[0][2] + a[0][1] * b[1][2] + a[0][2] * b[2][2]], [a[1][0] * b[0][0] + a[1][1] * b[1][0] + a[1][2] * b[2][0], a[1][0] * b[0][1] + a[1][1] * b[1][1] + a[1][2] * b[2][1], a[1][0] * b[0][0] + a[1][1] * b[1][2] + a[1][2] * b[2][2]], [a[2][0] * b[0][0] + a[2][1] * b[1][0] + a[2][2] * b[2][0], a[2][0] * b[0][1] + a[2][1] * b[1][1] + a[2][2] * b[2][1], a[2][0] * b[0][2] + a[2][1] * b[1][2] + a[2][2] * b[2][2]]];
+
+	        a = c.concat();
+	      };
+	      return a;
+	    },
+	    ar: ar
+	  };
+	  return matrix;
+	};
 
 	exports.default = {
 	  MxEvent: MxEvent,
 	  extend: extend,
 	  Vec: Vec
 	};
+
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.gesture = gesture;
+
+	var _Miku = __webpack_require__(1);
+
+	var _Miku2 = _interopRequireDefault(_Miku);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var MxEvent = _Miku2.default.MxEvent;
+	var Vec = _Miku2.default.Vec;
+	var extend = _Miku2.default.extend;
+	function gesture(s, prop) {
+	  var methods = s.split(/,/).map(function (s) {
+	    return s.trim();
+	  });
+	  var _ = {
+	    scale: {
+	      execute: function execute(pos) {
+	        var point1 = pos.point1;
+	        var point2 = pos.point2;
+
+	        var len = new Vec(point1.x - point2.x, point1.y - point2.y).length();
+
+	        if (!this.blen) this.blen = len;
+
+	        var s = len / this.blen * this.bs;
+	        this.sss = s;
+
+	        this.custom && this.custom(point1, point2, s);
+
+	        gesture.trigger('scale', { scale: s });
+	      },
+	      resolve: function resolve() {
+	        this.bs = this.sss;
+	        this.blen = 0;
+
+	        this.bs = max(prop.min_scale, min(this.bs, prop.max_scale));
+
+	        gesture.trigger('scale', { scale: this.bs });
+	      },
+	      bs: 1, sss: 1,
+	      blen: 0
+	    },
+	    drag: {
+	      execute: function execute(pos) {
+	        var point1 = pos.point1;
+
+	        if (!this.bv) this.bv = new Vec(point1.x, point1.y);
+	        var dx = point1.x - this.bv.x;
+	        var dy = point1.y - this.bv.y;
+	        this.bv.x = point1.x, this.bv.y = point1.y;
+	        gesture.trigger('drag', { dx: dx, dy: dy });
+	      },
+	      bv: 0,
+	      resolve: function resolve() {
+	        this.bv = 0;
+	      }
+	    },
+	    rotate: {
+	      execute: function execute(pos) {
+	        var point1 = pos.point1;
+	        var point2 = pos.point2;
+
+	        var v = new Vec(point1.x - point2.x, point1.y - point2.y).normal();
+
+	        if (!this.bvec) this.bvec = v;
+
+	        var rd = asin(v.cross(this.bvec) * -1);
+
+	        this.rotation = this.br + rd;
+
+	        this.custom && this.custom(point1, point2, this.rotation);
+
+	        gesture.trigger('rotate', {
+	          rotation: this.rotation
+	        });
+	      },
+	      resolve: function resolve() {
+	        this.bvec = 0;
+	        this.br = this.rotation;
+	      },
+	      bvec: 0,
+	      br: 0,
+	      rotation: 0
+
+	    }
+	  };
+	  var gesture = {
+	    execute: function execute(pos) {
+
+	      methods.forEach(function (s) {
+	        _[s].execute(pos);
+	      });
+	    },
+	    custom: function custom(s, fn) {
+	      _[s.trim()].custom = fn;
+	    },
+	    resolve: function resolve() {
+	      methods.forEach(function (s) {
+	        _[s].resolve();
+	      });
+	    }
+	  };
+
+	  extend(gesture, MxEvent, _);
+
+	  return gesture;
+	}
 
 /***/ }
 /******/ ]);
